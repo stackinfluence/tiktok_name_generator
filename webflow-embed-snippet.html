@@ -1,0 +1,32 @@
+<!--
+  Stack Influence - TikTok Name Generator embed
+  Paste into a Webflow Embed element on the Free Tools CMS page.
+  After deploy, replace BOTH occurrences of the Netlify URL below
+  (the iframe src AND the origin check) with your real site URL.
+-->
+<iframe
+  id="si-tikname-frame"
+  src="https://REPLACE-WITH-YOUR-SITE.netlify.app/"
+  title="TikTok Name Generator"
+  style="width:100%; border:0; overflow:hidden;"
+  scrolling="no"
+  loading="lazy"></iframe>
+
+<script>
+(function () {
+  var FRAME_ID = "si-tikname-frame";
+  var HEIGHT_KEY = "siTikNameHeight";
+  // Must match the iframe src origin exactly (protocol + host, no trailing slash).
+  var ALLOWED_ORIGIN = "https://REPLACE-WITH-YOUR-SITE.netlify.app";
+
+  window.addEventListener("message", function (e) {
+    if (e.origin !== ALLOWED_ORIGIN) return;
+    var data = e.data;
+    if (!data || typeof data !== "object") return;
+    var h = data[HEIGHT_KEY];
+    if (typeof h !== "number" || h <= 0) return;
+    var frame = document.getElementById(FRAME_ID);
+    if (frame) { frame.style.height = (h + 8) + "px"; }
+  });
+})();
+</script>

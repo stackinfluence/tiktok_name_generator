@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free TikTok Name Generator - Stack Influence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  --si-purple: #8551f5;
+  --si-purple-deep: #642eff;
+  --si-purple-light: #c3a4ff;
+  --si-purple-wash: #f0ecfb;
+  --si-pink: #ffabb9;
+  --si-pink-light: #fbe1e6;
+  --si-pink-deep: #dd5290;
+  --si-ink: #141a21;
+  --si-grey: #667085;
+  --si-line: #e6e2ee;
+  --si-paper: #ffffff;
+  --si-bg: #f9f8f4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--si-ink);
+  background: transparent;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 4px 16px 20px;
+}
+
+.panel {
+  background: var(--si-paper);
+  border: 1px solid var(--si-line);
+  border-radius: 16px;
+  padding: 26px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--si-purple-deep);
+  background: var(--si-purple-wash);
+  padding: 6px 11px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.eyebrow .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--si-pink-deep);
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+h1 em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 36px;
+  color: var(--si-purple-deep);
+}
+
+.sub {
+  color: var(--si-grey);
+  font-size: 15px;
+  max-width: 60ch;
+  margin-bottom: 22px;
+}
+
+label.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+label.field-label .opt {
+  font-weight: 400;
+  color: var(--si-grey);
+}
+
+.field { margin-bottom: 20px; }
+
+input[type="text"] {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--si-ink);
+  background: var(--si-bg);
+  border: 1px solid var(--si-line);
+  border-radius: 10px;
+  padding: 13px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+input[type="text"]::placeholder { color: #9aa1ac; }
+input[type="text"]:focus {
+  outline: none;
+  background: var(--si-paper);
+  border-color: var(--si-purple-light);
+  box-shadow: 0 0 0 3px var(--si-purple-wash);
+}
+
+.cats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.cat {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--si-ink);
+  background: var(--si-bg);
+  border: 1px solid var(--si-line);
+  border-radius: 10px;
+  padding: 10px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.14s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+}
+.cat:hover {
+  border-color: var(--si-purple-light);
+  background: var(--si-purple-wash);
+}
+.cat[aria-pressed="true"] {
+  border-color: var(--si-purple-deep);
+  background: var(--si-purple-wash);
+  color: var(--si-purple-deep);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--si-purple-deep) inset;
+}
+.cat .ico { font-size: 15px; line-height: 1; }
+
+.go {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--si-purple);
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s, transform 0.05s;
+}
+.go:hover { background: var(--si-purple-deep); }
+.go:active { transform: translateY(1px); }
+.go:disabled { opacity: 0.65; cursor: default; }
+
+.err {
+  display: none;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--si-pink-deep);
+  background: var(--si-pink-light);
+  border: 1px solid var(--si-pink);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.err.show { display: block; }
+
+/* results */
+.results { display: none; margin-top: 24px; }
+.results.show { display: block; }
+
+.results-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.results-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+.results-title em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  color: var(--si-purple-deep);
+}
+.regen {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--si-purple-deep);
+  background: transparent;
+  border: 1px solid var(--si-line);
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all 0.14s;
+}
+.regen:hover { background: var(--si-purple-wash); border-color: var(--si-purple-light); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.name-card {
+  background: var(--si-bg);
+  border: 1px solid var(--si-line);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.14s;
+}
+.name-card:hover { border-color: var(--si-purple-light); }
+
+.handle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.tik-badge {
+  flex: none;
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: var(--si-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.handle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--si-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.handle .at { color: var(--si-purple); }
+
+.note {
+  font-size: 12px;
+  color: var(--si-grey);
+  min-height: 15px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: auto;
+}
+.mini {
+  flex: 1;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.14s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid transparent;
+}
+.mini.copy {
+  color: var(--si-purple-deep);
+  background: var(--si-purple-wash);
+  border-color: var(--si-purple-wash);
+}
+.mini.copy:hover { background: #e6ddf9; }
+.mini.copy.done { background: #e7f5ef; color: #12855f; border-color: #cfeae0; }
+.mini.check {
+  color: var(--si-grey);
+  background: var(--si-paper);
+  border-color: var(--si-line);
+}
+.mini.check:hover { border-color: var(--si-purple-light); color: var(--si-purple-deep); }
+
+.disclaimer {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--si-grey);
+  background: var(--si-purple-wash);
+  border-radius: 8px;
+  padding: 11px 13px;
+  line-height: 1.45;
+}
+
+.loading {
+  display: none;
+  margin-top: 24px;
+  text-align: center;
+  color: var(--si-grey);
+  font-size: 14px;
+}
+.loading.show { display: block; }
+.spinner {
+  width: 26px; height: 26px;
+  margin: 0 auto 10px;
+  border: 3px solid var(--si-purple-wash);
+  border-top-color: var(--si-purple);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 560px) {
+  .panel { padding: 20px; }
+  h1 { font-size: 25px; }
+  h1 em { font-size: 30px; }
+  .cats { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+  .go:active { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <span class="eyebrow"><span class="dot"></span>Free Creator Tool</span>
+    <h1>TikTok <em>Name</em> Generator</h1>
+    <p class="sub">Turn a word, name, or niche into ten ready-to-use TikTok handles. Pick a category, add optional context, and copy the ones you like.</p>
+
+    <div class="field">
+      <label class="field-label" for="kw">Your keyword or name</label>
+      <input type="text" id="kw" placeholder="e.g. maya, glowup, cozybakes" maxlength="60" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label class="field-label">Choose your content category</label>
+      <div class="cats" id="cats" role="group" aria-label="Content category"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="extra">Add a little more <span class="opt">(optional)</span></label>
+      <input type="text" id="extra" placeholder="e.g. vintage vibe, based in Austin, loves matcha" maxlength="120" autocomplete="off">
+    </div>
+
+    <button class="go" id="go">Generate Username Ideas</button>
+    <div class="err" id="err"></div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Rounding up handle ideas...
+    </div>
+
+    <div class="results" id="results">
+      <div class="results-head">
+        <div class="results-title">Ten <em>handles</em> to try</div>
+        <button class="regen" id="regen">Regenerate</button>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="disclaimer">
+        These are ideas, not availability checks. TikTok has no public username lookup, so tap Check on any handle to see if it is open before you claim it.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CATEGORIES = [
+    { id: "beauty", label: "Beauty", ico: "\uD83D\uDC84" },
+    { id: "fashion", label: "Fashion", ico: "\uD83D\uDC57" },
+    { id: "dance", label: "Dance", ico: "\uD83D\uDC83" },
+    { id: "comedy", label: "Comedy", ico: "\uD83D\uDE02" },
+    { id: "food", label: "Food", ico: "\uD83C\uDF73" },
+    { id: "fitness", label: "Fitness", ico: "\uD83D\uDCAA" },
+    { id: "gaming", label: "Gaming", ico: "\uD83C\uDFAE" },
+    { id: "education", label: "Education", ico: "\uD83D\uDCA1" },
+    { id: "lifestyle", label: "Lifestyle", ico: "\u2728" },
+    { id: "travel", label: "Travel", ico: "\u2708\uFE0F" },
+    { id: "business", label: "Business", ico: "\uD83D\uDCBC" },
+    { id: "music", label: "Music", ico: "\uD83C\uDFA4" }
+  ];
+
+  var HEIGHT_KEY = "siTikNameHeight";
+
+  var kwEl = document.getElementById("kw");
+  var extraEl = document.getElementById("extra");
+  var catsEl = document.getElementById("cats");
+  var goEl = document.getElementById("go");
+  var errEl = document.getElementById("err");
+  var loadingEl = document.getElementById("loading");
+  var resultsEl = document.getElementById("results");
+  var gridEl = document.getElementById("grid");
+  var regenEl = document.getElementById("regen");
+
+  var selectedCat = "lifestyle";
+
+  // build category chips
+  CATEGORIES.forEach(function (c) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "cat";
+    b.setAttribute("data-id", c.id);
+    b.setAttribute("aria-pressed", c.id === selectedCat ? "true" : "false");
+    b.innerHTML = '<span class="ico">' + c.ico + '</span>' + c.label;
+    b.addEventListener("click", function () {
+      selectedCat = c.id;
+      var all = catsEl.querySelectorAll(".cat");
+      for (var i = 0; i < all.length; i++) {
+        all[i].setAttribute("aria-pressed", all[i].getAttribute("data-id") === selectedCat ? "true" : "false");
+      }
+    });
+    catsEl.appendChild(b);
+  });
+
+  function showError(msg) {
+    errEl.textContent = msg;
+    errEl.classList.add("show");
+    postHeight();
+  }
+  function clearError() {
+    errEl.classList.remove("show");
+  }
+
+  function setBusy(busy) {
+    goEl.disabled = busy;
+    goEl.textContent = busy ? "Generating..." : "Generate Username Ideas";
+    if (busy) { loadingEl.classList.add("show"); }
+    else { loadingEl.classList.remove("show"); }
+    postHeight();
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function render(ideas) {
+    gridEl.innerHTML = "";
+    ideas.forEach(function (it) {
+      var card = document.createElement("div");
+      card.className = "name-card";
+
+      var handleUrl = "https://www.tiktok.com/@" + encodeURIComponent(it.username);
+
+      card.innerHTML =
+        '<div class="handle-row">' +
+          '<span class="tik-badge">t</span>' +
+          '<span class="handle" title="@' + esc(it.username) + '"><span class="at">@</span>' + esc(it.username) + '</span>' +
+        '</div>' +
+        '<div class="note">' + esc(it.note || "") + '</div>' +
+        '<div class="card-actions">' +
+          '<button class="mini copy" type="button">Copy</button>' +
+          '<a class="mini check" href="' + handleUrl + '" target="_blank" rel="noopener noreferrer">Check on TikTok</a>' +
+        '</div>';
+
+      var copyBtn = card.querySelector(".copy");
+      copyBtn.addEventListener("click", function () {
+        copyText(it.username, copyBtn);
+      });
+
+      gridEl.appendChild(card);
+    });
+    resultsEl.classList.add("show");
+    postHeight();
+  }
+
+  function copyText(text, btn) {
+    var done = function () {
+      var old = btn.textContent;
+      btn.textContent = "Copied";
+      btn.classList.add("done");
+      setTimeout(function () {
+        btn.textContent = old;
+        btn.classList.remove("done");
+      }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function generate() {
+    clearError();
+    var keyword = kwEl.value.trim();
+    if (!keyword) {
+      showError("Add a keyword or name to get started.");
+      kwEl.focus();
+      return;
+    }
+
+    setBusy(true);
+    resultsEl.classList.remove("show");
+
+    fetch("/.netlify/functions/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keyword: keyword, category: selectedCat, extra: extraEl.value.trim() })
+    })
+      .then(function (r) {
+        return r.json().then(function (data) { return { ok: r.ok, data: data }; });
+      })
+      .then(function (res) {
+        setBusy(false);
+        if (!res.ok || !res.data || !res.data.ideas || !res.data.ideas.length) {
+          showError((res.data && res.data.error) ? res.data.error : "Could not generate ideas. Please try again.");
+          return;
+        }
+        render(res.data.ideas);
+      })
+      .catch(function () {
+        setBusy(false);
+        showError("Network hiccup. Please try again.");
+      });
+  }
+
+  goEl.addEventListener("click", generate);
+  regenEl.addEventListener("click", generate);
+
+  [kwEl, extraEl].forEach(function (el) {
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); generate(); }
+    });
+  });
+
+  // ---- auto-resize: post height to parent on every content change ----
+  function postHeight() {
+    var h = document.body.scrollHeight;
+    var msg = {};
+    msg[HEIGHT_KEY] = h;
+    try { window.parent.postMessage(msg, "*"); } catch (e) {}
+  }
+
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function () { postHeight(); });
+    ro.observe(document.body);
+  }
+  window.addEventListener("load", postHeight);
+  setTimeout(postHeight, 120);
+})();
+</script>
+</body>
+</html>
